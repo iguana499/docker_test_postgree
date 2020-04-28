@@ -1,0 +1,15 @@
+apt install docker.io -y
+sudo apt install openjdk-11-jre -y
+sudo apt install openjdk-11-jdk-headless -y
+sudo apt install openjdk-11-jresudo -y
+apt install gradle -y 
+echo "Start"
+git clone https://gitlab.com/romanov73/example-jpa.git
+cd ./example-jpa/
+gradle build
+docker build -t mydocker3 -f docker_script .
+docker network create --driver bridge postgres-network
+sudo docker cp ./build/libs/example-jpa-0.1.0-SNAPSHOT.jar mydocker3:/var/
+docker run --name mydocker3 --network postgres-network -v pgdata:/var/lib/postgresql/11/main -p 5432:5432 -d mydocker3
+sudo docker exec -it nextdocker1 java /var/example-jpa-0.1.0-SNAPSHOT.jar
+echo "Sucsess"
